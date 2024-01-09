@@ -1,6 +1,7 @@
 package tree
 
 import (
+	"asciitree/internal/minmax"
 	"fmt"
 	"regexp"
 	"strings"
@@ -24,12 +25,12 @@ func indent(lines []string, margin int) int {
 }
 
 func merge(left []string, right []string) []string {
-	minSize := min(len(left), len(right))
+	minSize := minmax.Min(len(left), len(right))
 	offset := 0
 	re := regexp.MustCompile(`\S.*`)
 	for i := 0; i < minSize; i++ {
 		replaced := re.ReplaceAllString(right[i], "")
-		offset = max(offset, len(left[i])+padding-len(replaced))
+		offset = minmax.Max(offset, len(left[i])+padding-len(replaced))
 	}
 
 	indent(right, -indent(left, offset))
@@ -68,7 +69,7 @@ func buildLines(node *TreeNode) []string {
 			dist := len(lines[0]) - 1 - i
 
 			repeatSpace := strings.Repeat(" ", i)
-			repeatDashHalf1 := strings.Repeat("-", max(0, dist/2-1))
+			repeatDashHalf1 := strings.Repeat("-", minmax.Max(0, dist/2-1))
 			// repeatDashHalf1 := strings.Repeat("-", dist/2-1)
 			repeatDashHalf2 := strings.Repeat("-", (dist-1)/2)
 
@@ -81,7 +82,7 @@ func buildLines(node *TreeNode) []string {
 	}
 
 	lines = append([]string{strings.Repeat(" ", indent(lines, i-half)) + node.Val}, lines...)
-	lines = append([]string{strings.Repeat(" ", i+max(0, half-1)) + "*"}, lines...)
+	lines = append([]string{strings.Repeat(" ", i+minmax.Max(0, half-1)) + "*"}, lines...)
 	return lines
 }
 
