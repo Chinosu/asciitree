@@ -1,0 +1,90 @@
+package tree
+
+import (
+	"fmt"
+	"regexp"
+	"strings"
+)
+
+const (
+	padding = 2
+)
+
+func indent(lines []string, margin int) int {
+	if margin >= 0 {
+		return margin
+	}
+
+	spaces := strings.Repeat(" ", -margin)
+
+	for i, line := range lines {
+		lines[i] = spaces + line
+	}
+	return 0
+}
+
+func merge(left []string, right []string) []string {
+	minSize := min(len(left), len(right))
+	offset := 0
+	re := regexp.MustCompile(`\S.*`)
+	for i := 0; i < minSize; i++ {
+		replaced := re.ReplaceAllString(right[i], "")
+		offset = max(offset, len(left[i])+padding-len(replaced))
+	}
+
+	indent(right, -indent(left, offset))
+
+	for i := 0; i < minSize; i++ {
+		left[i] += right[i][len(left[i]):]
+	}
+
+	if len(right) > minSize {
+		left = append(left, right[minSize:]...)
+	}
+
+	return left
+}
+
+func buildLines(node *TreeNode) []string {
+	if node == nil {
+		return nil
+	}
+
+	lines := merge(buildLines(node.Left), buildLines(node.Right))
+	half := int(len(node.Val) / 2)
+	i := half
+
+	if len(lines) > 0 {
+		var line string
+		i = strings.Index(lines[0], "*")
+
+		if node.Right == nil {
+			line = strings.Repeat(" ", i) + "┌─┘"
+			i += 2
+		} else if node.Left == nil {
+			i = indent(lines, i-2)
+			line = strings.Repeat(" ", i) + "└─┐"
+		} else {
+			dist := len(lines[0]) - 1 - i
+
+			repeatSpace := strings.Repeat(" ", i)
+			repeatDashHalf1 := strings.Repeat("-", max(0, dist/2-1))
+			// repeatDashHalf1 := strings.Repeat("-", dist/2-1)
+			repeatDashHalf2 := strings.Repeat("-", (dist-1)/2)
+
+			line = fmt.Sprintf("%s┌%s┴%s┐", repeatSpace, repeatDashHalf1, repeatDashHalf2)
+
+			i += dist / 2
+		}
+
+		lines[0] = line
+	}
+
+	lines = append([]string{strings.Repeat(" ", indent(lines, i-half)) + node.Val}, lines...)
+	lines = append([]string{strings.Repeat(" ", i+max(0, half-1)) + "*"}, lines...)
+	return lines
+}
+
+func Print(root *TreeNode) string {
+	return strings.Join(buildLines(root)[1:], "\n")
+}

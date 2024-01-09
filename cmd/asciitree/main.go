@@ -6,9 +6,14 @@ import (
 )
 
 func main() {
-	fmt.Println("hello world")
+	// fmt.Println("hello world")
 
-	serializedTree := "1,uwu,#,#,3,4,#,#,5,#,#"
+	serializedTree := "1,2,#,#,3,#,#"
 	root := tree.Deserialize(serializedTree)
 	tree.PrintLevelOrder(root)
+
+	fmt.Println()
+	fmt.Println()
+
+	fmt.Println(tree.Print(root))
 }
