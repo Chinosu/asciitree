@@ -1,10 +1,14 @@
 package tree
 
 import (
+	"regexp"
 	"strings"
 )
 
 func Deserialize(data string) *TreeNode {
+	re := regexp.MustCompile(`\r?\n`)
+	data = re.ReplaceAllString(data, "")
+
 	elements := strings.Split(data, ",")
 	index := 0
 
