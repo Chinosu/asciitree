@@ -1,11 +1,11 @@
 package tree
 
 type TreeNode struct {
-	Val   int
+	Val   string
 	Left  *TreeNode
 	Right *TreeNode
 }
 
-func NewTreeNode(val int) *TreeNode {
+func NewTreeNode(val string) *TreeNode {
 	return &TreeNode{Val: val}
 }

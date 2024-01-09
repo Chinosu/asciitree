@@ -1,8 +1,6 @@
 package tree
 
 import (
-	"log"
-	"strconv"
 	"strings"
 )
 
@@ -23,12 +21,7 @@ func Deserialize(data string) *TreeNode {
 			return nil
 		}
 
-		val, err := strconv.Atoi(elem)
-		if err != nil {
-			log.Fatalf("Error converting string to integer: %v", err)
-		}
-
-		node := NewTreeNode(val)
+		node := NewTreeNode(elem)
 		node.Left = buildTree()
 		node.Right = buildTree()
 
