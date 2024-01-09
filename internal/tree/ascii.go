@@ -21,7 +21,17 @@ func indent(lines []string, margin int) int {
 	for i, line := range lines {
 		lines[i] = spaces + line
 	}
+
 	return 0
+}
+
+func charCount(s string) int {
+	count := 0
+	for range s {
+		count++
+	}
+
+	return count
 }
 
 func merge(left []string, right []string) []string {
@@ -30,13 +40,13 @@ func merge(left []string, right []string) []string {
 	re := regexp.MustCompile(`\S.*`)
 	for i := 0; i < minSize; i++ {
 		replaced := re.ReplaceAllString(right[i], "")
-		offset = minmax.Max(offset, len(left[i])+padding-len(replaced))
+		offset = minmax.Max(offset, charCount(left[i])+padding-charCount(replaced))
 	}
 
 	indent(right, -indent(left, offset))
 
 	for i := 0; i < minSize; i++ {
-		left[i] += right[i][len(left[i]):]
+		left[i] += right[i][charCount(left[i]):]
 	}
 
 	if len(right) > minSize {
@@ -52,6 +62,7 @@ func buildLines(node *TreeNode) []string {
 	}
 
 	lines := merge(buildLines(node.Left), buildLines(node.Right))
+
 	half := int(len(node.Val) / 2)
 	i := half
 
@@ -69,9 +80,8 @@ func buildLines(node *TreeNode) []string {
 			dist := len(lines[0]) - 1 - i
 
 			repeatSpace := strings.Repeat(" ", i)
-			repeatDashHalf1 := strings.Repeat("-", minmax.Max(0, dist/2-1))
-			// repeatDashHalf1 := strings.Repeat("-", dist/2-1)
-			repeatDashHalf2 := strings.Repeat("-", (dist-1)/2)
+			repeatDashHalf1 := strings.Repeat("─", dist/2-1)
+			repeatDashHalf2 := strings.Repeat("─", (dist-1)/2)
 
 			line = fmt.Sprintf("%s┌%s┴%s┐", repeatSpace, repeatDashHalf1, repeatDashHalf2)
 
@@ -82,7 +92,7 @@ func buildLines(node *TreeNode) []string {
 	}
 
 	lines = append([]string{strings.Repeat(" ", indent(lines, i-half)) + node.Val}, lines...)
-	lines = append([]string{strings.Repeat(" ", i+minmax.Max(0, half-1)) + "*"}, lines...)
+	lines = append([]string{strings.Repeat(" ", i+minmax.Max(0, half-i)) + "*"}, lines...)
 	return lines
 }
 

@@ -8,16 +8,26 @@ import java.util.List;
 
 class Main {
     public static void main(String[] args) {
-        // Create nodes of the tree
-        Node root = new Node(1);
-        root.left = new Node(2);
-        root.right = new Node(3);
-        root.left.left = new Node(0);
-        // root.left.right = new Node(5);
-        // root.right.left = new Node(6);
-        root.right.right = new Node(20);
-        root.right.right.left = new Node(71);
-        root.right.right.left.left = new Node(6);
+        // // Create nodes of the tree
+        // Node root = new Node(1);
+        // root.left = new Node(2);
+        // root.right = new Node(3);
+        // root.left.left = new Node(0);
+        // // root.left.right = new Node(5);
+        // // root.right.left = new Node(6);
+        // root.right.right = new Node(20);
+        // root.right.right.left = new Node(71);
+        // root.right.right.left.left = new Node(6);
+
+        Node root = new Node(5);
+
+        root.left = new Node(1);
+        root.left.right = new Node(4);
+        root.left.right.left = new Node(3);
+
+        root.right = new Node(8);
+        root.right.left = new Node(6);
+        root.right.right = new Node(9);
 
         // Create an instance of TreeFormatter
         TreeFormatter formatter = new TreeFormatter();
