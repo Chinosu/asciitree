@@ -85,6 +85,6 @@ func buildLines(node *TreeNode) []string {
 	return lines
 }
 
-func Print(root *TreeNode) string {
+func Ascii(root *TreeNode) string {
 	return strings.Join(buildLines(root)[1:], "\n")
 }
